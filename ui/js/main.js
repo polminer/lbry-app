@@ -12,6 +12,7 @@ import * as types from "constants/action_types";
 
 const env = ENV;
 const { remote, ipcRenderer, shell } = require("electron");
+const { Menu, Tray } = require("electron").remote;
 const contextMenu = remote.require("./menu/context-menu");
 const app = require("./app");
 
@@ -71,6 +72,41 @@ const initialState = app.store.getState();
 
 var init = function() {
   app.store.dispatch(doDownloadLanguages());
+
+  let path = require("path");
+  let iconPath = path.join(
+    __dirname,
+    "/root/git-repos/lbry-repos/lbry-app/build/icons/96x96.png"
+  );
+  let appIcon = new Tray(iconPath);
+  let contextMenu = Menu.buildFromTemplate([
+    {
+      label: "Show App",
+      click: function() {
+        win.show();
+      },
+    },
+    {
+      label: "Quit",
+      click: function() {
+        win.close();
+      },
+    },
+  ]);
+
+  appIcon.setContextMenu(contextMenu);
+  appIcon.setToolTip("LBRY Application");
+  appIcon.setTitle("LBRY");
+  win.on("close", function() {
+    return false;
+  });
+  win.on("minimize", function(event) {
+    event.preventDefault();
+    win.hide();
+  });
+  win.on("show", function() {
+    appIcon.setHighlightMode("selection");
+  });
 
   function onDaemonReady() {
     window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
