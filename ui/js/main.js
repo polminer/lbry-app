@@ -75,8 +75,8 @@ var init = function() {
 
   let path = require("path");
   let iconPath = path.join(
-    __dirname,
-    "/root/git-repos/lbry-repos/lbry-app/build/icons/96x96.png"
+    remote.app.getAppPath(),
+    "/dist/img/fav/favicon-96x96.png"
   );
   let appIcon = new Tray(iconPath);
   let contextMenu = Menu.buildFromTemplate([

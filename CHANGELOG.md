@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Minimize LBRY app to tray (issue #374)
   *
 
 ### Changed
