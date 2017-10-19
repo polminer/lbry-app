@@ -1,6 +1,4 @@
-const {Menu} = require('electron');
-const electron = require('electron');
-const app = electron.app;
+const { app, Menu } = require('electron');
 
 const baseTemplate = [
   {
@@ -74,37 +72,17 @@ const macOSAppMenuTemplate = {
 const developerMenuTemplate = {
   label: 'Developer',
   submenu: [
-    {
-      label: 'Reload',
-      accelerator: 'CmdOrCtrl+R',
-      click(item, focusedWindow) {
-        if (focusedWindow) {
-          focusedWindow.reload();
-        }
-      }
-    },
-    {
-      label: 'Toggle Developer Tools',
-      accelerator: process.platform == 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-      click(item, focusedWindow) {
-        if (focusedWindow) {
-          focusedWindow.webContents.toggleDevTools();
-        }
-      }
-    },
-  ]
+     {role: 'reload'},
+     {role: 'forcereload'},
+     {role: 'toggledevtools'},
+     {type: 'separator'},
+     {role: 'togglefullscreen'}
+   ]
 };
 
-module.exports = {
-  showMenubar(showDeveloperMenu) {
+module.exports = () => {
     let template = baseTemplate.slice();
-    if (process.platform === 'darwin') {
-      template.unshift(macOSAppMenuTemplate);
-    }
-    if (showDeveloperMenu) {
-      template.push(developerMenuTemplate);
-    }
-
+    (process.platform === 'darwin') && template.unshift(macOSAppMenuTemplate);
+    template.push(developerMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-  },
 };
